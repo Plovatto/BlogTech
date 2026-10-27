@@ -95,7 +95,7 @@ http://localhost:8080
 
 ## API
 
-As publicações são carregadas de uma API REST desenvolvida em Node.js com Express:
+As publicações são carregadas de uma API REST desenvolvida em Node.js com Express. O endereço da API e as funções de busca ficam centralizados em `src/services/api.js`.
 
 | Rota                  | Descrição                          |
 | --------------------- | ---------------------------------- |
@@ -112,12 +112,16 @@ src/
 │   ├── Header.vue          # Navegação e banner
 │   ├── Recentes.vue        # Carrossel de publicações recentes
 │   ├── Equipe.vue          # Carrossel da equipe
-│   ├── Footer.vue          # Redes sociais
-│   └── publi0-5.vue        # Páginas das publicações
-├── layouts/                # Layout base com Vuetify
-├── plugins/                # Configuração do Vuetify e das fontes
+│   └── Footer.vue          # Redes sociais
+├── mixins/
+│   └── carrosselResponsivo.js  # Colunas dos carrosséis conforme a largura da tela
+├── plugins/
+│   └── vuetify.js          # Configuração do Vuetify
+├── services/
+│   └── api.js              # Cliente da API e funções de busca das publicações
 ├── views/
-│   └── Inicio.vue          # Página inicial
+│   ├── Inicio.vue          # Página inicial
+│   └── PaginaPostagem.vue  # Página de uma publicação (/postagem/:id)
 ├── App.vue
 ├── main.js
 └── router.js
@@ -133,7 +137,7 @@ O workflow está em:
 .github/workflows/deploy.yml
 ```
 
-O Vue CLI usa `publicPath: '/BlogTech/'` em produção para gerar os caminhos corretos dos assets no GitHub Pages. Como o GitHub Pages não tem suporte nativo a rotas de SPA, o workflow copia o `index.html` para `404.html`, permitindo abrir e recarregar diretamente páginas como `/BlogTech/publi0`.
+O Vue CLI usa `publicPath: '/BlogTech/'` em produção para gerar os caminhos corretos dos assets no GitHub Pages. Como o GitHub Pages não tem suporte nativo a rotas de SPA, o workflow copia o `index.html` para `404.html`, permitindo abrir e recarregar diretamente páginas como `/BlogTech/postagem/0`.
 
 Para publicar, configure no GitHub:
 
