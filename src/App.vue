@@ -1,11 +1,12 @@
-<template >
-  <v-app theme="">
-
+<template>
+  <v-app>
     <router-view></router-view>
-    
-</v-app>
+  </v-app>
 </template>
 
-<script setup>
-
-</script>
+<style>
+/* A fonte Inter é carregada no public/index.html */
+* {
+  font-family: 'Inter', sans-serif;
+}
+</style>
