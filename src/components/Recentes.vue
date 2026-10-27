@@ -24,18 +24,17 @@
       >
         <v-carousel-item v-for="(group, index) in slideGroups" :key="index">
           <v-row justify="center">
-            <v-col v-for="(slide, i) in group" :key="i" cols="12" :md="carouselCols" xs="2">
-
+            <v-col v-for="postagem in group" :key="postagem.id" cols="12" :md="carouselCols" xs="2">
               <div class="card h-100 w-auto">
-  <div class="card-image" :style="`background-image: url(${images[index * 3 + i]})`"></div>
-  <p class="card-title">
-    <router-link :to="`/publi${index * 3 + i}`">{{ slide }}</router-link>
-  </p>
-  <p class="card-body">{{ text[index * 3 + i] }}</p>
-  <p class="footer">
-    Escrito por <span class="by-name">{{ name[index * 3 + i] }}</span> em <span class="date">{{ date[index * 3 + i] }}</span>
-  </p>
-</div>
+                <div class="card-image" :style="`background-image: url(${postagem.imagem})`"></div>
+                <p class="card-title">
+                  <router-link :to="`/postagem/${postagem.id}`">{{ postagem.title }}</router-link>
+                </p>
+                <p class="card-body">{{ postagem.description }}</p>
+                <p class="footer">
+                  Escrito por <span class="by-name">{{ postagem.profileName }}</span> em <span class="date">{{ postagem.postDate }}</span>
+                </p>
+              </div>
             </v-col>
           </v-row>
         </v-carousel-item>
@@ -45,80 +44,32 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { getPostagens } from '@/services/api';
+import carrosselResponsivo, { agruparEmTres } from '@/mixins/carrosselResponsivo';
 
-import { useRouter } from 'vue-router';
-import axios from 'axios';
-
-export default defineComponent({
-  setup() {
-    const router = useRouter();
-
-    const openCustomLink = (i) => {
-      router.push(`/publi${i + 1}`);
-    };
-
-    return {
-      openCustomLink,
-    };
-  },
+export default {
+  mixins: [carrosselResponsivo],
   data() {
     return {
-      carouselCols: 1,
       loading: true,
-      slides: [],
-      text: [],
-      name: [],
-      date: [],
-      images: [],
+      postagens: [],
     };
   },
   computed: {
     slideGroups() {
-      const groups = [];
-      for (let i = 0; i < this.slides.length; i += 3) {
-        groups.push(this.slides.slice(i, i + 3));
-      }
-      return groups;
+      return agruparEmTres(this.postagens);
     },
   },
-  methods: {
-    async fetchData() {
-      try {
-        const response = await axios.get(
-          'https://apidoego.onrender.com/postagens/'
-        );
-
-        this.slides = response.data.map(item => item.title);
-        this.text = response.data.map(item => item.description);
-        this.name = response.data.map(item => item.profileName);
-        this.date = response.data.map(item => item.postDate);
-        this.images = response.data.map((item, index) => `https://apidoego.onrender.com/img/post-${index + 1}.jpg`);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        this.loading = false;
-      }
-    },
-    adjustCarouselCols() {
-      if (window.innerWidth >= 960) {
-        this.carouselCols = 4;
-      } else if (window.innerWidth >= 600) {
-        this.carouselCols = 2;
-      } else {
-        this.carouselCols = 1;
-      }
-    },
+  async mounted() {
+    try {
+      this.postagens = await getPostagens();
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      this.loading = false;
+    }
   },
-  mounted() {
-    this.adjustCarouselCols();
-    this.fetchData();
-    window.addEventListener('resize', this.adjustCarouselCols);
-  },
-  beforeUnmount() {
-    window.removeEventListener('resize', this.adjustCarouselCols);
-  },
-});
+};
 </script>
 
 

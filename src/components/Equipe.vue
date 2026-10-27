@@ -12,10 +12,10 @@
         <template v-for="(group, index) in slideGroups" :key="index">
           <v-carousel-item>
             <v-row justify="center">
-              <v-col v-for="(slide, i) in group" :key="i" cols="12" :md="carouselCols" xs="4">
+              <v-col v-for="membro in group" :key="membro.nome" cols="12" :md="carouselCols" xs="4">
                 <div class="card h-100 w-auto">
-                  <div class="card-photo" :style="`background-image:`"></div>
-                  <div class="card-title">{{ name[index * 3 + i] }}<br><span>{{ roles[index * 3 + i] }}</span></div>
+                  <div class="card-photo"></div>
+                  <div class="card-title">{{ membro.nome }}<br><span>{{ membro.cargo }}</span></div>
                   <div class="card-socials">
           <button  class="card-socials-btn facebook">
             <a href="https://pt-br.facebook.com/login/device-based/regular/login/"><svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" id="Layer_21" height="24" data-name="Layer 21"><title></title><path d="M16.75,9H13.5V7a1,1,0,0,1,1-1h2V3H14a4,4,0,0,0-4,4V9H8v3h2v9h3.5V12H16Z"></path></svg></a>
@@ -38,64 +38,44 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { getPostagens } from '@/services/api';
+import carrosselResponsivo, { agruparEmTres } from '@/mixins/carrosselResponsivo';
+
+// Os cargos são fixos no front; os nomes vêm dos autores das publicações
+const CARGOS = [
+  'Jornalista Investigativo',
+  'Repórter de Campo',
+  'Editor de Notícias',
+  'Jornalista Esportivo',
+  'Repórter de Cultura',
+  'Editora-Chefe',
+];
 
 export default {
+  mixins: [carrosselResponsivo],
   data() {
     return {
-      carouselCols: 1,
       loading: true,
-      name: [],
-      roles: [
-        'Jornalista Investigativo',
-        'Repórter de Campo',
-        'Editor de Notícias',
-        'Jornalista Esportivo',
-        'Repórter de Cultura',
-        'Editora-Chefe',
-      ],
-      images: [
-        // Provide image URLs here for each member
-      ],
+      membros: [],
     };
   },
   computed: {
     slideGroups() {
-      const groups = [];
-      for (let i = 0; i < this.name.length; i += 3) {
-        groups.push(this.name.slice(i, i + 3));
-      }
-      return groups;
+      return agruparEmTres(this.membros);
     },
   },
-  methods: {
-    async fetchData() {
-      try {
-        const response = await axios.get('https://apidoego.onrender.com/postagens/');
-        this.name = response.data.map(item => item.profileName);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        this.loading = false;
-      }
-    },
-    adjustCarouselCols() {
-      if (window.innerWidth >= 960) {
-        this.carouselCols = 4;
-      } else if (window.innerWidth >= 600) {
-        this.carouselCols = 2;
-      } else {
-        this.carouselCols = 1;
-      }
-    },
-  },
-  mounted() {
-    this.fetchData();
-    this.adjustCarouselCols();
-    window.addEventListener('resize', this.adjustCarouselCols);
-  },
-  beforeUnmount() {
-    window.removeEventListener('resize', this.adjustCarouselCols);
+  async mounted() {
+    try {
+      const postagens = await getPostagens();
+      this.membros = postagens.map((postagem, index) => ({
+        nome: postagem.profileName,
+        cargo: CARGOS[index],
+      }));
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      this.loading = false;
+    }
   },
 };
 </script>
@@ -162,14 +142,6 @@ export default {
   background-color: #5e2f0d;
   border-radius: .3em;
   box-shadow: 4.2em 0 0 #5e2f0d;
-}
-
-.card-title {
-  text-align: center;
-  color: var(--font-color);
-  font-size: 20px;
-  font-weight: 400;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .card-title {
