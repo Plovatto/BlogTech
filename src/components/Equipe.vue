@@ -4,7 +4,10 @@
      <v-container id="Equipe" class="w-auto mt-15 mb-15">
     <h3>Equipe</h3>
     <hr class="w-25 mt-2 mb-8">
-    <div class="d-flex justify-center align-center vh-100">
+    <div v-if="loading" class="d-flex justify-center py-10">
+      <v-progress-circular indeterminate color="#E0AA8B"></v-progress-circular>
+    </div>
+    <div v-else class="d-flex justify-center align-center vh-100">
       <v-carousel :autoplay="false"  :no-swipe="true"  :interval="8000" hide-delimiters cycle no-controls height="auto" show-arrows="hover" :hide-delimiter-background="true" :cols="carouselCols" class="carousel-container custom-dot" dot-color="#FFFFFF">
         <template v-for="(group, index) in slideGroups" :key="index">
           <v-carousel-item>
@@ -41,6 +44,7 @@ export default {
   data() {
     return {
       carouselCols: 1,
+      loading: true,
       name: [],
       roles: [
         'Jornalista Investigativo',
@@ -71,6 +75,8 @@ export default {
         this.name = response.data.map(item => item.profileName);
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        this.loading = false;
       }
     },
     adjustCarouselCols() {

@@ -3,7 +3,11 @@
   <v-container id="Recentes" class="w-auto mt-15 mb-15">
     <h3>Recentes</h3>
     <hr class="w-25 mt-2 mb-8">
-    <div class="d-flex justify-center align-center vh-100">
+    <div v-if="loading" class="d-flex flex-column align-center ga-3 py-10 text-center">
+      <v-progress-circular indeterminate color="#E0AA8B"></v-progress-circular>
+      <p class="loading-text">Carregando publicações… o servidor gratuito pode levar até 1 minuto para acordar.</p>
+    </div>
+    <div v-else class="d-flex justify-center align-center vh-100">
       <v-carousel
         :autoplay="false"
         :no-swipe="true"
@@ -25,7 +29,7 @@
               <div class="card h-100 w-auto">
   <div class="card-image" :style="`background-image: url(${images[index * 3 + i]})`"></div>
   <p class="card-title">
-    <a :href="`/publi${index * 3 + i}`">{{ slide }} Slide</a>
+    <router-link :to="`/publi${index * 3 + i}`">{{ slide }}</router-link>
   </p>
   <p class="card-body">{{ text[index * 3 + i] }}</p>
   <p class="footer">
@@ -61,6 +65,7 @@ export default defineComponent({
   data() {
     return {
       carouselCols: 1,
+      loading: true,
       slides: [],
       text: [],
       name: [],
@@ -91,6 +96,8 @@ export default defineComponent({
         this.images = response.data.map((item, index) => `https://apidoego.onrender.com/img/post-${index + 1}.jpg`);
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        this.loading = false;
       }
     },
     adjustCarouselCols() {
@@ -182,5 +189,10 @@ a:visited{
 
   .by-name {
     font-weight: 700;
+  }
+
+  .loading-text {
+    font-size: 14px;
+    color: #666;
   }
   </style>
