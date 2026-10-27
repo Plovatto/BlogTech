@@ -1,24 +1,33 @@
 # TechTrends
 
-[![Prévia do blog TechTrends](.github/assets/hero.png)](https://plovatto.github.io/BlogTech/)
-
-<p align="center"><a href="https://plovatto.github.io/BlogTech/"><strong>Ver o projeto ao vivo →</strong></a></p>
+[![CI](https://github.com/Plovatto/BlogTech/actions/workflows/ci.yml/badge.svg)](https://github.com/Plovatto/BlogTech/actions/workflows/ci.yml)
+[![Deploy](https://github.com/Plovatto/BlogTech/actions/workflows/deploy.yml/badge.svg)](https://github.com/Plovatto/BlogTech/actions/workflows/deploy.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Blog de notícias de tecnologia desenvolvido com Vue 3 e Vuetify, consumindo publicações, autores e imagens de uma API REST própria.
 
-O projeto foi criado em 2023, durante meus estudos de front-end, para praticar componentização com Vue, roteamento, consumo de APIs e layouts responsivos com Vuetify.
+**Acesse o app:** https://plovatto.github.io/BlogTech/
 
-> **Nota:** Este é um projeto de estudo. O blog, as notícias e a equipe são fictícios.
+> **Projeto de estudo (2023):** criado durante meus estudos de front-end para praticar componentização com Vue, roteamento, consumo de APIs e layouts responsivos. O blog, as notícias e a equipe são fictícios.
 
 > **Primeiro acesso:** a API está hospedada no plano gratuito do Render, que hiberna quando fica sem uso. Na primeira visita, as publicações podem levar até 1 minuto para carregar.
 
-## Demo
+<p align="center">
+  <img src=".github/assets/hero.png" alt="Topo do blog TechTrends com menu de navegação e banner de turbinas eólicas" width="900">
+</p>
 
-O projeto está publicado no GitHub Pages: **[plovatto.github.io/BlogTech](https://plovatto.github.io/BlogTech/)**
+<p align="center"><em>Página inicial do TechTrends</em></p>
 
-|                          Página inicial                          |                      Publicação                      |
-| :--------------------------------------------------------------: | :--------------------------------------------------: |
-| ![Página inicial com recentes e equipe](.github/assets/home.png) | ![Página de uma publicação](.github/assets/post.png) |
+<table>
+  <tr>
+    <td width="50%"><img src=".github/assets/home.png" alt="Página inicial com carrossel de publicações recentes e equipe"></td>
+    <td width="50%"><img src=".github/assets/post.png" alt="Página de uma publicação com imagem, texto, autor e data"></td>
+  </tr>
+  <tr>
+    <td align="center"><em>Publicações recentes e equipe</em></td>
+    <td align="center"><em>Página de uma publicação</em></td>
+  </tr>
+</table>
 
 ## Funcionalidades
 
@@ -159,3 +168,7 @@ O TechTrends foi desenvolvido com o objetivo de praticar e demonstrar conhecimen
 - Deploy de aplicações front-end
 
 Este projeto foi desenvolvido para fins de estudo e portfólio.
+
+## Licença
+
+Distribuído sob a [Licença MIT](LICENSE).
